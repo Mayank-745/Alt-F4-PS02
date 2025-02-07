@@ -1,0 +1,118 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, rgb(88, 88, 88) 23% ,#3a3a3a 46%, #5d5d5d 69%, white 90%);
+}
+    nav{
+    background:linear-gradient(0deg, #000000, #1c1c1c, #232323,#272727,#373737);
+    padding: 10px 20px;
+    height: 45px;
+  }
+  ul {
+    list-style: none;
+    display: flex;
+    justify-content: flex-start;
+  }
+  li {
+    margin: 0 50px;
+  }
+  a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s;
+  }
+  a:hover {
+    color: #d1d5db;
+  }
+  .welcome {
+    background-color: black;
+    height: 625px;
+    padding-top: 80px;
+    color: white;
+  }
+  
+  .message {
+    color: white;
+    background-color: rgb(0, 0, 0);
+    height: 625px;
+  }
+  
+  .message h3 {
+    font-size: 75px;
+    margin-top: 15px;
+    margin-bottom: 25px;
+    margin-left: 20px;
+  }
+  
+  .message h4 {
+    font-size: 50px;
+    margin-bottom: 25px;
+    margin-left: 20px;
+  }
+  
+  .message button {
+    background: white;
+    color: black;
+    font-size: 20px;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-weight: bold;
+    margin-left: 20px;
+    margin-top: 30px;
+  }
+  
+  .message button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    background: rgb(142, 142, 142);
+  }
+  
+  .message button:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+  
+  .flashcards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 150px;
+    padding: 40px;
+    max-width: 1000px;
+    margin: 100px auto;
+    max-height: auto;
+  }
+
+.flashcard {
+  background: white;
+  color: black;
+  padding: 40px;
+  border-radius: 8px;
+  font-size: 18px;
+  text-align: justify;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  max-width: 600px;
+  background: #3b3b3b;
+  color: #d5d5d5;
+}
+
+.flashcard p {
+  font-size: 18px;
+  margin-top: 10px;
+  text-align: left;
+}
+
+.flashcard:hover {
+  transform: translateY(-5px);
+  opacity: 0.5;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
