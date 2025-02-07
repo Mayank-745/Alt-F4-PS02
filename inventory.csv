@@ -1,0 +1,6 @@
+ResourceID,Type,Quantity,ExpiryDate,CenterID
+1,Food,5000,2025-12-01,101
+2,Water,10000,N/A,102
+3,Medicine,200,2026-01-15,101
+4,Blankets,300,N/A,103
+5,Fuel,1000,2026-06-30,102

@@ -1,0 +1,6 @@
+VehicleID,Type,Capacity,CurrentLocation,Availability
+201,Truck,2000,Center 101,Available
+202,Van,1000,Center 102,Unavailable
+203,Helicopter,500,In Transit,Available
+204,Boat,800,Center 103,Available
+205,Truck,1500,Center 102,Unavailable
