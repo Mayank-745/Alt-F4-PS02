@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse & Disaster Priority</title>
+
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #1e1e1e;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        th, td {
+            border: 1px solid #444;
+            padding: 12px;
+            text-align: center;
+            color: white;
+        }
+
+        th {
+            background-color: #333;
+        }
+
+        tr:nth-child(even) {
+            background-color: #222;
+        }
+
+        tr:hover {
+            background-color: #444;
+        }
+
+        .low-stock {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🏢 Warehouse Resources</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Warehouse</th>
+                    <th>Location</th>
+                    <th>Food (units)</th>
+                    <th>Water (liters)</th>
+                    <th>Medical Supplies (kits)</th>
+                    <th>Evacuation Vehicles</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for warehouse in warehouses %}
+                    <tr>
+                        <td>{{ warehouse.name }}</td>
+                        <td>{{ warehouse.city }}, {{ warehouse.country }}</td>
+                        <td class="{% if warehouse.food < 50 %}low-stock{% endif %}">{{ warehouse.food }}</td>
+                        <td class="{% if warehouse.water < 500 %}low-stock{% endif %}">{{ warehouse.water }}</td>
+                        <td class="{% if warehouse.medical_supplies < 20 %}low-stock{% endif %}">{{ warehouse.medical_supplies }}</td>
+                        <td>{{ warehouse.evacuation_vehicles }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>🚨 Disaster Priority Table</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>City</th>
+                    <th>Disaster Type</th>
+                    <th>Severity</th>
+                    <th>Population Density</th>
+                    <th>Assigned Warehouse</th>
+                    <th>Priority Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for disaster in disaster_priorities %}
+                <tr>
+                    <td>{{ disaster.city }}</td>
+                    <td>{{ disaster.disaster_type }}</td>
+                    <td>{{ disaster.severity }}</td>
+                    <td>{{ disaster.population_density }}</td>
+                    <td>{{ disaster.assigned_warehouse }}</td>
+                    <td>{{ disaster.priority_score }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
