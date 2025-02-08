@@ -5,7 +5,7 @@
   }
   body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, rgb(88, 88, 88) 23% ,#3a3a3a 46%, #5d5d5d 69%, white 90%);
+    background: linear-gradient(135deg, rgb(46, 46, 46) 23% ,#3a3a3a 46%, #5d5d5d 69%, white 90%);
 }
     nav{
     background:black;
