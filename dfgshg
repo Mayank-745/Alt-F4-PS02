@@ -1,0 +1,216 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Allocation</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        /* Map Styling */
+        #map {
+            height: 500px;
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #444;
+        }
+
+        /* Marker Legend */
+        #legend {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: white;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            margin-right: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #1e1e1e;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        th, td {
+            border: 1px solid #444;
+            padding: 10px;
+            text-align: center;
+            color: white;
+        }
+
+        th {
+            background-color: #333;
+        }
+
+        tr:nth-child(even) {
+            background-color: #222;
+        }
+
+        tr:hover {
+            background-color: #444;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Disaster Map</h2>
+        <div id="map"></div>
+
+        <!-- Marker Legend Box -->
+        <div id="legend">
+            <strong>Legend</strong>
+            <div class="legend-item"><span class="legend-color" style="background: red;"></span>Wildfires</div>
+            <div class="legend-item"><span class="legend-color" style="background: blue;"></span>Floods</div>
+            <div class="legend-item"><span class="legend-color" style="background: purple;"></span>Storms</div>
+            <div class="legend-item"><span class="legend-color" style="background: yellow;"></span>Volcanic Activity</div>
+            <div class="legend-item"><span class="legend-color" style="background: gray;"></span>Other Disasters</div>
+            <div class="legend-item"><span class="legend-color" style="background: green;"></span>Warehouses</div>
+        </div>
+
+        <!-- Resource Allocation Table -->
+        <h2>Disaster and warehouse table</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Disaster</th>
+                    <th>Category</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Nearest Warehouse</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for allocation in allocations|slice:":20" %}
+                    <tr>
+                        <td>{{ allocation.disaster.title }}</td>
+                        <td>{{ allocation.disaster.category }}</td>
+                        <td>{{ allocation.disaster.latitude }}</td>
+                        <td>{{ allocation.disaster.longitude }}</td>
+                        <td>{{ allocation.warehouse.name }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Warehouse Table -->
+        <h2>Warehouses</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Food</th>
+                    <th>Water</th>
+                    <th>Medical Supplies</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for warehouse in warehouses|slice:":10" %}
+                    <tr>
+                        <td>{{ warehouse.name }}</td>
+                        <td>{{ warehouse.food }}</td>
+                        <td>{{ warehouse.water }}</td>
+                        <td>{{ warehouse.medical_supplies }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <script>
+        var map = L.map('map').setView([20, 0], 2); // Center the map globally
+
+        // Light-themed Map Tiles (instead of dark)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap Contributors'
+        }).addTo(map);
+
+        // Disaster Colors
+        var disasterColors = {
+            "Wildfires": "red",
+            "Floods": "blue",
+            "Storms": "purple",
+            "Volcanic Activity": "yellow",
+            "Other": "gray"
+        };
+
+        // Disaster Markers
+        {% for allocation in allocations|slice:":20" %}
+            var category = "{{ allocation.disaster.category }}";
+            var color = disasterColors[category] || disasterColors["Other"];
+
+            L.marker([{{ allocation.disaster.latitude }}, {{ allocation.disaster.longitude }}], {
+                icon: L.divIcon({
+                    className: 'custom-icon',
+                    html: '<div style="background:' + color + '; width: 10px; height: 10px; border-radius: 50%;"></div>',
+                    iconSize: [10, 10],
+                    popupAnchor: [0, -5]
+                })
+            }).addTo(map)
+              .bindPopup("<b>Disaster:</b> {{ allocation.disaster.title }} <br><b>Category:</b> {{ allocation.disaster.category }}");
+        {% endfor %}
+
+        // Warehouse Markers (Green)
+        {% for warehouse in warehouses|slice:":10" %}
+            L.marker([{{ warehouse.latitude }}, {{ warehouse.longitude }}], {
+                icon: L.divIcon({
+                    className: 'custom-icon',
+                    html: '<div style="background:green; width: 10px; height: 10px; border-radius: 50%;"></div>',
+                    iconSize: [10, 10],
+                    popupAnchor: [0, -5]
+                })
+            }).addTo(map)
+              .bindPopup("<b>Warehouse:</b> {{ warehouse.name }}<br>" +
+                         "<b>Food:</b> {{ warehouse.food }} units<br>" +
+                         "<b>Water:</b> {{ warehouse.water }} liters<br>" +
+                         "<b>Medical Supplies:</b> {{ warehouse.medical_supplies }} kits");
+        {% endfor %}
+    </script>
+
+</body>
+</html>
