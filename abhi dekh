@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Priority List</title>
+
+    
+</head>
+<body>
+
+    <div class="container">
+        <h2>🚨 Disaster Priority Ranking 🚨</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>City</th>
+                    <th>Disaster Type</th>
+                    <th>Severity</th>
+                    <th>Nearest Relief Center</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for disaster in disasters %}
+                <tr>
+                    <td>{{ disaster.rank }}</td>
+                    <td>{{ disaster.city }}</td>  <!-- ✅ Fixed Empty City Issue -->
+                    <td>{{ disaster.category }}</td>
+                    <td>{{ disaster.severity }}</td>
+                    <td>{{ disaster.nearest_relief }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
