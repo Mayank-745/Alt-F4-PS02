@@ -1,78 +1,189 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="ResourceAl.css">
-    <title>Warehouse & Disaster Priority</title>
+    <title>Resource Allocation</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        /* Map Styling */
+        #map {
+            height: 500px;
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #444;
+        }
+
+        /* Marker Legend */
+        #legend {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: white;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            margin-right: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #1e1e1e;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        th, td {
+            border: 1px solid #444;
+            padding: 10px;
+            text-align: center;
+            color: white;
+        }
+
+        th {
+            background-color: #333;
+        }
+
+        tr:nth-child(even) {
+            background-color: #222;
+        }
+
+        tr:hover {
+            background-color: #444;
+        }
+    </style>
 </head>
 <body>
-    <div class="navbar">
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="#">Request Assistance</a></li>
-                <li><a href="#">Donate</a></li>
-                <li><a href="about.html">About</a></li>
-              </ul>
-        </nav>
-    </div>
 
     <div class="container">
-        <h2>🏢 Warehouse Resources</h2>
-        
+        <h2>Disaster Map</h2>
+        <div id="map"></div>
+
+        <!-- Marker Legend Box -->
+        <div id="legend">
+            <strong>Legend</strong>
+            <div class="legend-item"><span class="legend-color" style="background: red;"></span>Wildfires</div>
+            <div class="legend-item"><span class="legend-color" style="background: blue;"></span>Floods</div>
+            <div class="legend-item"><span class="legend-color" style="background: purple;"></span>Storms</div>
+            <div class="legend-item"><span class="legend-color" style="background: yellow;"></span>Volcanic Activity</div>
+            <div class="legend-item"><span class="legend-color" style="background: gray;"></span>Other Disasters</div>
+            <div class="legend-item"><span class="legend-color" style="background: orange;"></span>Relief Centers</div>
+        </div>
+
+        <!-- Disaster Table -->
+        <h2>Disasters and Nearest Relief Centers</h2>
         <table>
             <thead>
                 <tr>
-                    <th>Warehouse</th>
-                    <th>Location</th>
-                    <th>Food (units)</th>
-                    <th>Water (liters)</th>
-                    <th>Medical Supplies (kits)</th>
-                    <th>Evacuation Vehicles</th>
+                    <th>Disaster</th>
+                    <th>Category</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Nearest Relief Center</th>
                 </tr>
             </thead>
             <tbody>
-                {% for warehouse in warehouses %}
+                {% for disaster in disasters|slice:":20" %}
                     <tr>
-                        <td>{{ warehouse.name }}</td>
-                        <td>{{ warehouse.city }}, {{ warehouse.country }}</td>
-                        <td class="{% if warehouse.food < 50 %}low-stock{% endif %}">{{ warehouse.food }}</td>
-                        <td class="{% if warehouse.water < 500 %}low-stock{% endif %}">{{ warehouse.water }}</td>
-                        <td class="{% if warehouse.medical_supplies < 20 %}low-stock{% endif %}">{{ warehouse.medical_supplies }}</td>
-                        <td>{{ warehouse.evacuation_vehicles }}</td>
+                        <td>{{ disaster.title }}</td>
+                        <td>{{ disaster.category }}</td>
+                        <td>{{ disaster.latitude }}</td>
+                        <td>{{ disaster.longitude }}</td>
+                        <td>{{ disaster.nearest_relief_center }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
-
-        <h2>🚨 Disaster Priority Table</h2>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>City</th>
-                    <th>Disaster Type</th>
-                    <th>Severity</th>
-                    <th>Population Density</th>
-                    <th>Assigned Warehouse</th>
-                    <th>Priority Score</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for disaster in disaster_priorities %}
-                <tr>
-                    <td>{{ disaster.city }}</td>
-                    <td>{{ disaster.disaster_type }}</td>
-                    <td>{{ disaster.severity }}</td>
-                    <td>{{ disaster.population_density }}</td>
-                    <td>{{ disaster.assigned_warehouse }}</td>
-                    <td>{{ disaster.priority_score }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
     </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <script>
+        var map = L.map('map').setView([20, 0], 2);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap Contributors'
+        }).addTo(map);
+
+        // Disaster Colors
+        var disasterColors = {
+            "Wildfires": "red",
+            "Floods": "blue",
+            "Storms": "purple",
+            "Volcanic Activity": "yellow",
+            "Other": "gray"
+        };
+
+        // ✅ Add Disaster Markers
+        {% for disaster in disasters|slice:":20" %}
+            var category = "{{ disaster.category }}";
+            var color = disasterColors[category] || disasterColors["Other"];
+
+            L.marker([{{ disaster.latitude }}, {{ disaster.longitude }}], {
+                icon: L.divIcon({
+                    className: 'custom-icon',
+                    html: '<div style="background:' + color + '; width: 10px; height: 10px; border-radius: 50%;"></div>',
+                    iconSize: [10, 10],
+                    popupAnchor: [0, -5]
+                })
+            }).addTo(map)
+              .bindPopup("<b>Disaster:</b> {{ disaster.title }} <br><b>Category:</b> {{ disaster.category }} <br><b>Nearest Relief Center:</b> {{ disaster.nearest_relief_center }}");
+        {% endfor %}
+
+        // ✅ Add Relief Center Markers (Orange)
+        {% for relief_center in relief_centers|slice:":10" %}
+            L.marker([{{ relief_center.latitude }}, {{ relief_center.longitude }}], {
+                icon: L.divIcon({
+                    className: 'custom-icon',
+                    html: '<div style="background:orange; width: 10px; height: 10px; border-radius: 50%;"></div>',
+                    iconSize: [10, 10],
+                    popupAnchor: [0, -5]
+                })
+            }).addTo(map)
+              .bindPopup("<b>Relief Center:</b> {{ relief_center.name }}");
+        {% endfor %}
+    </script>
 
 </body>
 </html>
