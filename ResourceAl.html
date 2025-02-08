@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="ResourceAl.css">
+    <title>Warehouse & Disaster Priority</title>
+</head>
+<body>
+    <div class="navbar">
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">Request Assistance</a></li>
+                <li><a href="#">Donate</a></li>
+                <li><a href="about.html">About</a></li>
+              </ul>
+        </nav>
+    </div>
+
+    <div class="container">
+        <h2>🏢 Warehouse Resources</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Warehouse</th>
+                    <th>Location</th>
+                    <th>Food (units)</th>
+                    <th>Water (liters)</th>
+                    <th>Medical Supplies (kits)</th>
+                    <th>Evacuation Vehicles</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for warehouse in warehouses %}
+                    <tr>
+                        <td>{{ warehouse.name }}</td>
+                        <td>{{ warehouse.city }}, {{ warehouse.country }}</td>
+                        <td class="{% if warehouse.food < 50 %}low-stock{% endif %}">{{ warehouse.food }}</td>
+                        <td class="{% if warehouse.water < 500 %}low-stock{% endif %}">{{ warehouse.water }}</td>
+                        <td class="{% if warehouse.medical_supplies < 20 %}low-stock{% endif %}">{{ warehouse.medical_supplies }}</td>
+                        <td>{{ warehouse.evacuation_vehicles }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>🚨 Disaster Priority Table</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>City</th>
+                    <th>Disaster Type</th>
+                    <th>Severity</th>
+                    <th>Population Density</th>
+                    <th>Assigned Warehouse</th>
+                    <th>Priority Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for disaster in disaster_priorities %}
+                <tr>
+                    <td>{{ disaster.city }}</td>
+                    <td>{{ disaster.disaster_type }}</td>
+                    <td>{{ disaster.severity }}</td>
+                    <td>{{ disaster.population_density }}</td>
+                    <td>{{ disaster.assigned_warehouse }}</td>
+                    <td>{{ disaster.priority_score }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

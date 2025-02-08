@@ -8,9 +8,10 @@
     background: linear-gradient(135deg, rgb(88, 88, 88) 23% ,#3a3a3a 46%, #5d5d5d 69%, white 90%);
 }
     nav{
-    background:linear-gradient(0deg, #000000, #1c1c1c, #232323,#272727,#373737);
+    background:black;
     padding: 10px 20px;
     height: 45px;
+    margin-bottom: 2.5px;
   }
   ul {
     list-style: none;

@@ -1,0 +1,100 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+    font-family: 'Arial', sans-serif;
+    background: rgb(54, 54, 54);
+    color: white;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .app {
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  
+  /* Container */
+  .container {
+    max-width: 1200px;
+    margin: 5rem auto 2rem;
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+    height: 550px;
+  }
+  
+  /* Table Styling */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  th, td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #444;
+  }
+  
+  th {
+    background: #333;
+    font-weight: bold;
+  }
+  
+  tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.05);
+  }
+  
+  tr:hover {
+    background: #444;
+  }
+  
+  /* Low Stock Highlight */
+  .low-stock {
+    color: red;
+    font-weight: bold;
+  }
+  
+  /* Headings */
+  h2 {
+    color: #f4f4f4;
+    margin-top: 2rem;
+  }
+  
+  /* Responsive Table */
+  @media (max-width: 768px) {
+    .data-table {
+      font-size: 0.9rem;
+    }
+  }
+  nav{
+    background:black;
+    padding: 10px 20px;
+    height: 45px;
+  }
+  ul {
+    list-style: none;
+    display: flex;
+    justify-content: flex-start;
+  }
+  li {
+    margin: 0 50px;
+  }
+  a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s;
+  }
+  a:hover {
+    color: #d1d5db;
+  }
