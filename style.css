@@ -35,6 +35,7 @@
     height: 625px;
     padding-top: 80px;
     color: white;
+    margin-bottom: 150px;
   }
   
   .message {
@@ -84,15 +85,16 @@
   .flashcards {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 150px;
+    gap: 200px;
     padding: 40px;
     max-width: 1000px;
     margin: 100px auto;
     max-height: auto;
+    margin-top: 200px;
+   
   }
 
 .flashcard {
-  background: white;
   color: black;
   padding: 40px;
   border-radius: 8px;
@@ -102,8 +104,8 @@
   transition: transform 0.2s, box-shadow 0.2s;
   cursor: pointer;
   max-width: 600px;
-  background: #3b3b3b;
-  color: #d5d5d5;
+  background: linear-gradient(135deg, #797979, #4a4a4a,#797979);
+  color: white;
 }
 
 .flashcard p {
